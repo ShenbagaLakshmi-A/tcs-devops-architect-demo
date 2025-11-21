@@ -18,4 +18,9 @@ public class TcsDevopsArchitectDemoApplication {
 	public String home() {
 		return "<h1>Welcome to TCS DevOps Architect Demo Application</h1>";
 	}
+	
+	@GetMapping("/about")
+	public String about() {
+		return "<h1>We are TCS Team, responsible for the DevOps activities</h1>";
+	}
 }
