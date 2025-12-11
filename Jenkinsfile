@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     tools {
-        // Use the Maven tool configured in Jenkins as "M3"
         maven "M3"
     }
 
@@ -14,14 +13,12 @@ pipeline {
 
     stages {
 
-        stage('Checkout Code') {
+        stage('Build') {
             steps {
-                git branch: 'main', url: 'https://github.com/ShenbagaLakshmi-A/tcs-devops-architect-demo.git'
-            }
-        }
-
-        stage('Build with Maven') {
-            steps {
+                git branch: 'main',
+                    url: 'https://github.com/ShenbagaLakshmi-A/tcs-devops-architect-demo.git',
+                    credentialsId: 'git'      // <--- YOUR CREDENTIAL ID
+               
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
             post {
@@ -55,7 +52,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Deploy the application in k8s') {
             steps {
                 sh "kubectl apply -f deployment.yaml"
             }
