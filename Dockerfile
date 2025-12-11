@@ -1,14 +1,15 @@
-# Use lightweight JDK image
-FROM openjdk:21-jdk-slim
+# Base Image for Java 21
+FROM eclipse-temurin:21-jdk-jammy
 
 # Set working directory inside container
 WORKDIR /app
 
-# Copy the Spring Boot JAR to the container
+# Copy jar file
 COPY target/*.jar app.jar
 
-# Expose application port
+# Expose port
 EXPOSE 8080
 
-# Run the application
+# Run the Spring Boot application
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
