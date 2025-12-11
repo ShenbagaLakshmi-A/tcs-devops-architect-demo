@@ -8,7 +8,7 @@ pipeline {
     environment {
         DOCKER_HUB_USER = "shenbagalakshmi6"
         IMAGE_NAME = "demo-app"
-        DOCKER_CREDENTIALS = "docker-hub-creds"
+        DOCKER_CREDENTIALS = "Docker-Id"   // <---- updated Docker Hub credential ID
     }
 
     stages {
@@ -17,7 +17,7 @@ pipeline {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/ShenbagaLakshmi-A/tcs-devops-architect-demo.git',
-                    credentialsId: 'git'
+                    credentialsId: 'git'   // <---- your Git credential ID
             }
         }
 
@@ -42,7 +42,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: DOCKER_CREDENTIALS,
+                    credentialsId: 'Docker-Id',      // <--- updated
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]) {
