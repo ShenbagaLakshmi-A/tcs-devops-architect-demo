@@ -8,7 +8,8 @@ pipeline {
     environment {
         DOCKER_HUB_USER = "shenbagalakshmi6"
         IMAGE_NAME = "demo-app"
-        DOCKER_CREDENTIALS = "Docker-Id"   // <---- updated Docker Hub credential ID
+        DOCKER_CREDENTIALS = "Docker-Id"      // Docker Hub creds
+        KUBECONFIG_CRED = "kubeconfig"        // Kubeconfig file credential ID
     }
 
     stages {
@@ -17,7 +18,7 @@ pipeline {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/ShenbagaLakshmi-A/tcs-devops-architect-demo.git',
-                    credentialsId: 'git'   // <---- your Git credential ID
+                    credentialsId: 'git'
             }
         }
 
@@ -42,7 +43,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'Docker-Id',      // <--- updated
+                    credentialsId: 'Docker-Id',
                     usernameVariable: 'USER',
                     passwordVariable: 'PASS'
                 )]) {
@@ -54,7 +55,12 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                bat "kubectl apply -f deployment.yaml"
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KCFG')]) {
+                    bat """
+                        set KUBECONFIG=%KCFG%
+                        kubectl apply -f deployment.yaml --validate=false
+                    """
+                }
             }
         }
     }
